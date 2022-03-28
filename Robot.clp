@@ -36,6 +36,7 @@
     (test (= ?sobrecarga 0))
     (test (<> ?manzanas manzanasPedido) )
     (test (> ?numManzanas 0))
+    (test (< ?numCajas ?*maxCajas*))
     =>
     (assert (robot 0 (+ ?manzanas 1) 0 0 0 (+ ?numCajas 1)))
     (assert (paletManzanas (- ?numManzanas 1)))
@@ -44,6 +45,24 @@
 (defrule comprobar_sobrecarga
     (robot ?naranjas ?manzanas ?caquis ?uvas ?sobrecarga ?numCajas)
 
+    (test (= ?numCajas ?*maxCajas*))
+    =>
+    (assert (robot ?naranjas ?manzanas ?caquis ?uvas 1 ?numCajas ))
+
+)
+
+(defrule pedido_completado
+    (robot ?naranjas ?manzanas ?caquis ?uvas ?sobrecarga ?numCajas)
+    (pedido ?naranjasPedido ?manzanasPedido ?caquisPedido ?uvasPedido)
+    (lineaPedidos ?naranjasEntregadas ?manzanasEntregadas ?caquisEntregadas ?uvasEntregadas)
+
+
+    (test (= ?naranjasEntregadas ?naranjasPedido))
+    (test (= ?manzanasEntregadas ?manzanasPedido))
+    (test (= ?caquisEntregadas ?caquisPedido))
+    (test (= ?uvasEntregadas ?uvasPedido))
+    =>
+    (assert (robot ?naranjas ?manzanas ?caquis ?uvas 1 ?numCajas ))
 
 )
 
